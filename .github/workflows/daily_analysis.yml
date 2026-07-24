@@ -2,6 +2,8 @@ name: Daily Stock Analysis
 
 on:
   schedule:
+    # A股收盘后 15:30 CST (07:30 UTC)
+    - cron: '30 7 * * 1-5'
     # 港股收盘后 16:30 HKT (08:30 UTC)
     - cron: '30 8 * * 1-5'
     # 美股收盘后 04:30 HKT (20:30 UTC, 前一天)

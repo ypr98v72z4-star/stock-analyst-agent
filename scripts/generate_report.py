@@ -22,28 +22,39 @@ def build_data_summary(market_data: dict) -> str:
         lines.append(f"- {bm['symbol']}: {bm.get('latest', 'N/A')} ({direction} {pct}%)")
     lines.append("")
 
-    # 个股数据
+    # 个股数据 (按市场分组)
     lines.append("## 自选股数据")
+    
+    # 按市场分组
+    markets = {}
     for sym, stock in market_data["stocks"].items():
-        ind = stock.get("indicators", {})
-        info = stock.get("info", {})
-        lines.append(f"\n### {stock['name']} ({sym})")
-        lines.append(f"- 收盘价: {ind.get('latest_close', 'N/A')}")
-        lines.append(f"- 涨跌幅: {ind.get('change_pct', 'N/A')}%")
-        lines.append(f"- 成交量比: {ind.get('volume_ratio', 'N/A')}x 均量")
-        if ind.get("rsi"):
-            lines.append(f"- RSI: {ind['rsi']}")
-        if ind.get("volatility"):
-            lines.append(f"- 波动率(年化): {ind['volatility']}%")
-        if ind.get("ma5"):
-            lines.append(f"- MA5: {ind['ma5']} / MA10: {ind.get('ma10', 'N/A')}")
+        market = stock.get("market", "其他")
+        if market not in markets:
+            markets[market] = []
+        markets[market].append((sym, stock))
+    
+    for market_name, stock_list in markets.items():
+        lines.append(f"\n### {market_name}")
+        for sym, stock in stock_list:
+            ind = stock.get("indicators", {})
+            info = stock.get("info", {})
+            lines.append(f"\n#### {stock['name']} ({sym})")
+            lines.append(f"- 收盘价: {ind.get('latest_close', 'N/A')}")
+            lines.append(f"- 涨跌幅: {ind.get('change_pct', 'N/A')}%")
+            lines.append(f"- 成交量比: {ind.get('volume_ratio', 'N/A')}x 均量")
+            if ind.get("rsi"):
+                lines.append(f"- RSI: {ind['rsi']}")
+            if ind.get("volatility"):
+                lines.append(f"- 波动率(年化): {ind['volatility']}%")
+            if ind.get("ma5"):
+                lines.append(f"- MA5: {ind['ma5']} / MA10: {ind.get('ma10', 'N/A')}")
 
-        # 新闻
-        news = stock.get("news", [])
-        if news:
-            lines.append(f"- 近期新闻:")
-            for n in news[:3]:
-                lines.append(f"  - {n['title']}")
+            # 新闻
+            news = stock.get("news", [])
+            if news:
+                lines.append(f"- 近期新闻:")
+                for n in news[:3]:
+                    lines.append(f"  - {n['title']}")
 
     return "\n".join(lines)
 

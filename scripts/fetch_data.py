@@ -91,23 +91,25 @@ def fetch_all(config: dict) -> dict:
     for bm in config["benchmarks"]:
         benchmarks.append(fetch_benchmark(bm["symbol"], period))
 
-    # 股票池
+    # 股票池 (A股 + 港股 + 美股)
     stocks = {}
-    all_watchlist = config["watchlist"].get("hk", []) + config["watchlist"].get("us", [])
-    for item in all_watchlist:
-        sym = item["symbol"]
-        name = item["name"]
+    market_map = {"cn": "A股", "hk": "港股", "us": "美股"}
+    for market_key, market_label in market_map.items():
+        for item in config["watchlist"].get(market_key, []):
+            sym = item["symbol"]
+            name = item["name"]
 
-        data = fetch_stock_data(sym, period, interval)
-        news = fetch_news(sym, max_news)
-        indicators = calculate_indicators(data["history"])
+            data = fetch_stock_data(sym, period, interval)
+            news = fetch_news(sym, max_news)
+            indicators = calculate_indicators(data["history"])
 
-        stocks[sym] = {
-            "name": name,
-            "info": data["info"],
-            "indicators": indicators,
-            "news": news,
-        }
+            stocks[sym] = {
+                "name": name,
+                "market": market_label,
+                "info": data["info"],
+                "indicators": indicators,
+                "news": news,
+            }
 
     return {
         "date": today,

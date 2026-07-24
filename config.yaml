@@ -4,31 +4,45 @@
 
 # 股票池
 watchlist:
+  # A股 (yfinance: 上海 .SS, 深圳 .SZ)
+  cn:
+    - symbol: "000858.SZ"
+      name: "五粮液"
+    - symbol: "600436.SS"
+      name: "片仔癀"
+    - symbol: "000878.SZ"
+      name: "云南铜业"
+  # 港股
   hk:
-    - symbol: "0700.HK"
-      name: "腾讯控股"
     - symbol: "9988.HK"
       name: "阿里巴巴"
-    - symbol: "9618.HK"
-      name: "京东集团"
-    - symbol: "3690.HK"
-      name: "美团"
-    - symbol: "1810.HK"
-      name: "小米集团"
+    - symbol: "0700.HK"
+      name: "腾讯控股"
+    - symbol: "6055.HK"
+      name: "中烟香港"
+    - symbol: "2313.HK"
+      name: "申洲国际"
+    - symbol: "0981.HK"
+      name: "中芯国际"
+  # 美股
   us:
-    - symbol: "AAPL"
-      name: "Apple"
-    - symbol: "NVDA"
-      name: "NVIDIA"
     - symbol: "TSLA"
-      name: "Tesla"
-    - symbol: "MSFT"
-      name: "Microsoft"
+      name: "特斯拉"
     - symbol: "GOOGL"
-      name: "Alphabet"
+      name: "谷歌"
+    - symbol: "AMZN"
+      name: "亚马逊"
+    - symbol: "XBI"
+      name: "美国生科ETF-SPDR"
+    - symbol: "NVDA"
+      name: "英伟达"
 
 # 市场指数基准
 benchmarks:
+  - symbol: "000001.SS"
+    name: "上证指数"
+  - symbol: "399001.SZ"
+    name: "深证成指"
   - symbol: "^HSI"
     name: "恒生指数"
   - symbol: "^HSCE"
