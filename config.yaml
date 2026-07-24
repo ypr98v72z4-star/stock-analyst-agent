@@ -1,0 +1,76 @@
+# ============================================================
+# 股票分析助手 - 配置文件
+# ============================================================
+
+# 股票池
+watchlist:
+  hk:
+    - symbol: "0700.HK"
+      name: "腾讯控股"
+    - symbol: "9988.HK"
+      name: "阿里巴巴"
+    - symbol: "9618.HK"
+      name: "京东集团"
+    - symbol: "3690.HK"
+      name: "美团"
+    - symbol: "1810.HK"
+      name: "小米集团"
+  us:
+    - symbol: "AAPL"
+      name: "Apple"
+    - symbol: "NVDA"
+      name: "NVIDIA"
+    - symbol: "TSLA"
+      name: "Tesla"
+    - symbol: "MSFT"
+      name: "Microsoft"
+    - symbol: "GOOGL"
+      name: "Alphabet"
+
+# 市场指数基准
+benchmarks:
+  - symbol: "^HSI"
+    name: "恒生指数"
+  - symbol: "^HSCE"
+    name: "恒生中国企业指数"
+  - symbol: "^GSPC"
+    name: "S&P 500"
+  - symbol: "^IXIC"
+    name: "纳斯达克"
+
+# 数据源配置
+data_sources:
+  # Yahoo Finance (免费, 通过 yfinance)
+  market_data:
+    provider: "yfinance"
+    period: "5d"           # 拉取最近5天数据用于计算指标
+    interval: "1d"
+
+  # 新闻/公告 (可替换为其他源)
+  news:
+    provider: "yfinance"   # yfinance 自带新闻
+    max_per_stock: 5
+
+# Hermes 配置
+hermes:
+  # 云端 API 或自托管 endpoint
+  endpoint: "${HERMES_ENDPOINT}"       # 环境变量注入
+  api_key: "${HERMES_API_KEY}"         # 环境变量注入
+  model: "hermes-3-llama-3.1-405b"    # 或你部署的模型
+  temperature: 0.3
+  max_tokens: 2048
+
+# 报告配置
+report:
+  output_dir: "reports"
+  format: "markdown"
+  # 企业微信 Webhook (用于 Hermes 推送)
+  wecom_webhook: "${WECOM_WEBHOOK_URL}"
+
+# 调度配置
+schedule:
+  timezone: "Asia/Hong_Kong"
+  # 港股收盘后 16:30 HKT
+  hk_market_close: "16:30"
+  # 美股收盘后 04:30 HKT (次日)
+  us_market_close: "04:30"
