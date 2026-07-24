@@ -26,6 +26,10 @@ watchlist:
       name: "中芯国际"
   # 美股
   us:
+    - symbol: "AAPL"
+      name: "苹果"
+    - symbol: "MSFT"
+      name: "微软"
     - symbol: "TSLA"
       name: "特斯拉"
     - symbol: "GOOGL"
