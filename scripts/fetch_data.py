@@ -89,7 +89,11 @@ def fetch_all(config: dict) -> dict:
     # 基准指数
     benchmarks = []
     for bm in config["benchmarks"]:
-        benchmarks.append(fetch_benchmark(bm["symbol"], period))
+        try:
+            benchmarks.append(fetch_benchmark(bm["symbol"], period))
+        except Exception as e:
+            print(f"⚠ 抓取指数 {bm['symbol']} 失败: {e}")
+            benchmarks.append({"symbol": bm["symbol"], "name": bm["name"], "latest": None, "change_pct": None})
 
     # 股票池 (A股 + 港股 + 美股)
     stocks = {}
@@ -99,17 +103,27 @@ def fetch_all(config: dict) -> dict:
             sym = item["symbol"]
             name = item["name"]
 
-            data = fetch_stock_data(sym, period, interval)
-            news = fetch_news(sym, max_news)
-            indicators = calculate_indicators(data["history"])
+            try:
+                data = fetch_stock_data(sym, period, interval)
+                news = fetch_news(sym, max_news)
+                indicators = calculate_indicators(data["history"])
 
-            stocks[sym] = {
-                "name": name,
-                "market": market_label,
-                "info": data["info"],
-                "indicators": indicators,
-                "news": news,
-            }
+                stocks[sym] = {
+                    "name": name,
+                    "market": market_label,
+                    "info": data["info"],
+                    "indicators": indicators,
+                    "news": news,
+                }
+            except Exception as e:
+                print(f"⚠ 抓取股票 {sym} ({name}) 失败: {e}")
+                stocks[sym] = {
+                    "name": name,
+                    "market": market_label,
+                    "info": {},
+                    "indicators": {},
+                    "news": [],
+                }
 
     return {
         "date": today,
